@@ -1,6 +1,6 @@
 {
   "name": "@kumar935/formfield",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A react component for making forms easy.",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,11 @@
     "url": "https://github.com/kumar935/FormField/issues"
   },
   "homepage": "https://github.com/kumar935/FormField#readme",
+  "dependencies": {
+    "react-select": "^1.2.1",
+    "prop-types": "^15.6.1",
+    "styled-components": "^3.2.5"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -39,10 +44,7 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-watch": "^3.1.4",
     "polished": "^1.9.2",
-    "prop-types": "^15.6.1",
     "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-select": "^1.2.1",
-    "styled-components": "^3.2.5"
+    "react-dom": "^16.3.1"
   }
 }
