@@ -1,5 +1,5 @@
 {
-  "name": "formfield",
+  "name": "form-field",
   "version": "1.0.0",
   "description": "A react component for making forms easy.",
   "main": "index.js",
