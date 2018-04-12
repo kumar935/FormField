@@ -1,7 +1,10 @@
+import '../styles/common.css';
+import 'react-select/dist/react-select.css';
 import React, { Component } from 'react';
-import {AsyncVKeyboard} from "./AsyncLib";
 import Select from 'react-select';
 import {REGEXP_PREFIX} from "./Constants";
+import styled from 'styled-components';
+const color = "#4a70e4";
 
 const ERROR_MSGS = {
   DEFAULT: 'There was an error',
@@ -17,6 +20,188 @@ const ERROR_MSGS = {
   ONLY_ALPHABETS: 'Only Alphabets are allowed',
   INVALID_INPUT: 'Please enter valid input'
 };
+
+const InputWrapper = styled.div`
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  cursor: text;
+  height: 60px;
+  margin-bottom: 16px;
+  text-align: left;
+  &::-webkit-contacts-auto-fill-button, &::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+  }
+`;
+const Input = styled.input`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: transparent;
+  outline: none;
+  border: none;
+  vertical-align: middle;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 10px;
+  text-align: inherit;
+  z-index:1;
+    input ~ .error-msg {
+    display: none;
+  }
+  & ~ .error-msg, & ~ .notif-msg, & ~ .loading {
+    font-size: 12px;
+    margin-top: 4px;
+    color: #f35353;
+  }
+  & ~ .notif-msg {
+    color: ${color};
+  }
+  & ~ .loading {
+    color: #545454;
+  }
+  &[error="true"] ~ .error-msg {
+    display: block;
+  }
+  &:focus ~ label, &[active="true"] ~ label, &:valid ~ label {
+    top: 0;
+    font-size: 15px;
+    color: ${color};
+  }
+  &:focus ~ label.button, &[active="true"] ~ label.button, &:valid ~ label.button {
+    color: #fff;
+  }
+  &:disabled ~ label {
+    color: #d6d6d6;
+  }
+  &:disabled ~ .line {
+    background: #d6d6d6;
+  }
+  &:focus ~ .line, &[active="true"] ~ .line, &:valid ~ .line {
+    &:after {
+      width: 100%;
+    }
+  }
+  &::placeholder {
+    color: #aaaaaa;
+    font-size: 14px;
+    font-weight: normal;
+  }
+  &[data-type='custom-pwd']{
+    text-security:disc;
+    -webkit-text-security:disc;
+    -mox-text-security:disc;
+  }
+`;
+const Label = styled.label`
+  position: absolute;
+  top: calc(50% - 5px);
+  font-size: 22px;
+  left: 0;
+  color: #000;
+  transition: all 0.3s;
+  cursor: text;
+  &.position-right{
+    right: 0!important;
+    left: auto;
+    top: auto !important;
+    bottom:5px;
+    z-index:1;
+    font-weight: normal;
+  }
+  &.button{
+    text-transform: none;
+    color: #fff;
+  }
+`;
+const Line = styled.span`
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  bottom: 0;
+  background: #000;
+  left: 0;
+  &:after {
+    content: "";
+    display: block;
+    width: 0;
+    background: ${color};
+    height: 1px;
+    transition: all 0.5s;
+  }
+`;
+
+
+const SelectWrapper = styled.div`
+  position: relative;
+  height: 36px;
+  line-height: 36px;
+  &.label {
+    padding-top: 15px;
+
+    .Select{
+      top:20px;
+    }
+  }
+  .Select{
+    font-size: 14px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    line-height: inherit;
+    top:0;
+    .Select-control, Select-multi-value-wrapper,.Select-input, .Select-placeholder{
+      height: inherit;
+      line-height: inherit;
+    }
+  }
+  .error-msg{
+    display: none;
+  }
+  label {
+    position: absolute;
+    top: 0;
+    font-size: 14px;
+    color: ${color};
+    left: 0;
+    line-height: 15px;
+    z-index: 1;
+    white-space: nowrap;
+  }
+  .line {
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    bottom: 0;
+    background: #000;
+    left: 0;
+    &:after {
+      content: "";
+      display: block;
+      width: 0;
+      background: #33bb55;
+      height: 1px;
+      transition: all 0.5s;
+    }
+  }
+  select:focus ~ .line, select:focus ~ .line, select:valid ~ .line, .has-value ~  .line{
+    &:after {
+      width: 100%;
+    }
+  }
+  .select-error{
+    font-size: 12px;
+    color: #f35353;
+    top: 27px;
+    position: relative;
+  }
+`
 
 const validationProfilesConfig = {
   default(val, props){
@@ -130,7 +315,6 @@ class FormField extends Component {
       hide: false,
       readOnly: true,
       webKitTextSecurityPresent: false,
-      showKeyboard: false
     };
   }
   componentDidMount() {
@@ -196,8 +380,7 @@ class FormField extends Component {
       errorMsg: ''
     })
   }
-  handleInputChange = (e, virtual) => {
-    if(this.state.showKeyboard && !virtual) return; //if virtual keyboard open, mechanical keyboard ignore input.
+  handleInputChange = (e) => {
     let newValue = e.target.value;
     if(this.props.config.type === 'number'){
       if(isNaN(newValue)) return;
@@ -323,30 +506,6 @@ class FormField extends Component {
   onFocusCustomPwd =()=>{
     this.setState({ readOnly: false, focused: true });
   }
-  // onFocusCustomPwd =()=>{
-  //   if(!this.state.focused) {
-  //     this.setState({ hide: true, focused: true});
-  //   }
-  // }
-  onClickShowKeyboard = () => {
-    this.setState(prevState=> {
-      return {
-        showKeyboard: !prevState.showKeyboard,
-        ...{...prevState.showKeyboard === true ? {} :{value: ''}}
-      };
-    });
-  }
-  onChangeVirtualKeyboard = e => {
-    if(!this.keyboard) return;
-    this.input.focus();
-    this.handleInputChange({target:{value: e}}, true);
-  }
-  onVirtualKeyboardInputSubmitted = () => {
-    this.setState({ showKeyboard: false });
-  }
-  onVirtualKeyboardInputCancelled = () => {
-    this.setState({ showKeyboard: false, value: '' });
-  }
   render(){
     const {config, onRef, ...rest} = this.props;
     const common = {
@@ -355,19 +514,19 @@ class FormField extends Component {
     if(config.type === 'radio'){
       return (
         <div className="radio-group">
-          {config.label && !config.hideLabel ? <label>{config.label}</label> : ''}
+          {config.label && !config.hideLabel ? <Label>{config.label}</Label> : ''}
           <div className="radio-group-wraper">
             {config.options.map(option => (
               <React.Fragment>
-                <label className="radio">
-                  <input
+                <Label className="radio">
+                  <Input
                     type="radio"
                     value={option.value}
                     checked={this.state.value === option.value}
                     onChange={this.handleRadioChange}/>
                   <span />
-                </label>
-                <label className="radioLabel" htmlFor={option.label}>{option.label}</label>
+                </Label>
+                <Label className="radioLabel" htmlFor={option.label}>{option.label}</Label>
               </React.Fragment>
             ))}
           </div>
@@ -377,8 +536,8 @@ class FormField extends Component {
     }
     if(config.type === 'select'){
       return (
-          <div className={`select-box label ${config.containerClass || ''}`} error={this.state.error.toString()}>
-          <label>{config.label}</label>
+        <SelectWrapper className={`select-box label ${config.containerClass || ''}`} error={this.state.error.toString()}>
+          <Label>{config.label}</Label>
           <Select
             name={`select-${config.label}`}
             value={this.state.value}
@@ -388,18 +547,18 @@ class FormField extends Component {
             {...config.SelectArgs ? config.SelectArgs : {}}
           />
           <span className="error-msg select-error">{this.state.errorMsg}</span>
-          <span className="line" />
-        </div>
+          {/*<Line />*/}
+        </SelectWrapper>
       );
     }
     return (
-      <div className={`floating-label-input ${config.containerClass || ''}`}>
+      <InputWrapper className={config.containerClass || ''}>
         {(() => {
           switch(config.type){
             case 'text':
             case 'password':
               return (
-                <input
+                <Input
                   type={config.type}
                   value={this.state.value}
                   error={this.state.error.toString()}
@@ -413,8 +572,8 @@ class FormField extends Component {
               break;
             case 'custom-pwd':
               return [
-                <input type="password" tabIndex="-1" required name="fake_pwd" style={{position: 'absolute', top: '-20000px'}} key="fake-pwd"/>,
-                <input
+                <Input type="password" tabIndex="-1" required name="fake_pwd" style={{position: 'absolute', top: '-20000px'}} key="fake-pwd"/>,
+                <Input
                   key="real-pwd"
                   type={this.state.pwdType}
                   {...this.state.hide ? {'data-type': 'custom-pwd'} : {}}
@@ -432,7 +591,7 @@ class FormField extends Component {
               break;
             case 'number':
               return (
-                <input
+                <Input
                   type='text'
                   value={this.state.value}
                   error={this.state.error.toString()}
@@ -445,7 +604,7 @@ class FormField extends Component {
               break;
             default:
               return (
-                <input
+                <Input
                   type="text"
                   value={this.state.value}
                   autoComplete="off"
@@ -461,81 +620,16 @@ class FormField extends Component {
         {config.type === 'custom-pwd' ? (
           <span className={`eye ${this.state.hide ? 'show' : 'hide'}`} onClick={this.showHidePwd}/>
         ) : ''}
-        {config.virtualKeyboard ? (
-          <div className="keyboard-container" key="keyboard-container">
-            {this.state.showKeyboard ? (
-              <AsyncVKeyboard
-                value={this.state.value}
-                name='keyboard'
-                options={{
-                  type:"input",
-                  layout: "custom",
-                  customLayout: {
-                    'normal': [
-                      '~ ! @ # $ % ^ & * ( )',
-                      '1 2 3 4 5 6 7 8 9 0 {bksp}',
-                      'q w e r t y u i o p',
-                      'a s d f g h j k l {enter}',
-                      '{shift} z x c v b n m {shift}',
-                      '{accept} {space} {cancel} {extender}'],
-                    'shift': [
-                      '~ ! @ # $ % ^ & * ( )',
-                      '1 2 3 4 5 6 7 8 9 0 {bksp}',
-                      'Q W E R T Y U I O P',
-                      'A S D F G H J K L {enter}',
-                      '{shift} Z X C V B N M {shift}',
-                      '{accept} {space} {cancel} {extender}']
-                  },
-                  alwaysOpen: true,
-                  usePreview: false,
-                  useWheel: false,
-                  stickyShift: true,
-                  appendLocally: true,
-                  color: "light",
-                  updateOnChange: true,
-                  initialFocus: true,
-                  ...{...config.sizeRange ? {maxLength: config.sizeRange[1]} : {}},
-                  display: {
-                    "accept" : "Submit"
-                  }
-                }}
-                onChange={this.onChangeVirtualKeyboard}
-                onAccepted={this.onVirtualKeyboardInputSubmitted}
-                onRef={ref => {
-                  this.keyboard = ref;
-                  if(this.keyboard && this.keyboard.interface){
-                    this.keyboard.interface.keyaction.cancel = this.onVirtualKeyboardInputCancelled;
-                    this.keyboard.interface.keyaction.enter = this.onVirtualKeyboardInputSubmitted;
-                  }
-                }}
-              />
-            ) : ''}
-          </div>
-        ) : ''}
-        <label htmlFor={this.props.id}>{this.props.config.label}</label>
+        <Label htmlFor={this.props.id}>{this.props.config.label}</Label>
         <span className="error-msg">{this.state.errorMsg}</span>
         {config.posRightBtn && config.posRightBtn.domClass ? (
-          <label
+          <Label
             className={`position-right ${config.posRightBtn.domClass}`}
             onClick={config.posRightBtn.onClick}
           />
         ) : ''}
-        <span className="line" />
-        {config.virtualKeyboard && config.type === 'custom-pwd' ? (
-          <div
-            className="checkboxWrapper keyboard-checkbox">
-            <input
-              name={`show-keyboard ${this.props.id}`}
-              id={`show-keyboard ${this.props.id}`}
-              type="checkbox"
-              checked={this.state.showKeyboard}
-              onChange={this.onClickShowKeyboard}
-              hidden
-            />
-            <label htmlFor={`show-keyboard ${this.props.id}`} className="checkbox">{I18n("g.msg.vkboard")}</label>
-          </div>
-        ) : ''}
-      </div>
+        <Line className="line"/>
+      </InputWrapper>
     )
   }
 }
