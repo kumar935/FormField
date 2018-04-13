@@ -24,7 +24,7 @@ class App extends Component {
       this.pwdInput.isValid(),
       this.selectInput.isValid()
     ].indexOf(false) !== -1) return;
-    alert(`what up: ${this.helloInput.getValue()}`);
+    alert(`what up: ${this.textInput.getValue()}`);
   }
   render() {
     return (
