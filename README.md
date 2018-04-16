@@ -62,7 +62,7 @@ class App extends Component {
             options: [
               {value: "Rio", label: "Rio"},
               {value: "Tokyo", label: "Tokyo"},
-              {value: "New York", label: "New York"}
+              {value: "Nairobi", label: "Nairobi"}
             ]
           }}
           onRef={ref => this.selectInput = ref}
