@@ -263,6 +263,9 @@ class FormField extends Component {
       );
     }
     if(config.type === 'select'){
+      if(FormField.defaults.styles.selectStyle === "default" || !FormField.defaults.styles.selectStyle){
+        require('react-select/dist/react-select.css');
+      }
       const SelectWrapper = selectStyleWrapperMap[FormField.defaults.styles.selectStyle] || DefaultSelectWrapper;
       let selectProps = {
         name:`select-${config.label}`,
