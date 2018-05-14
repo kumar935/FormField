@@ -216,7 +216,10 @@ class FormField extends Component {
   }
   setValue(value){
     return new Promise(resolve => {
-      this.setState({value}, ()=>{
+      this.setState({
+        value,
+        ...!value ? {} : {error: false, errorMsg: ""}
+      }, ()=>{
         resolve({"done": "ok"});
       });
     });
@@ -261,25 +264,36 @@ class FormField extends Component {
     }
     if(config.type === 'select'){
       const SelectWrapper = selectStyleWrapperMap[FormField.defaults.styles.selectStyle] || DefaultSelectWrapper;
+      let selectProps = {
+        name:`select-${config.label}`,
+        value:this.state.value,
+        options:config.options || [],
+        onChange:this.handleSelectChange,
+        clearable:false,
+        noResultsText:config.loading ? 'Loading...' : 'No Results',
+        ...config.SelectArgs ? config.SelectArgs : {}
+      };
       return (
         <SelectWrapper
           className={`select-box label ${config.containerClass || ''}`}
           error={this.state.error.toString()}
           color={FormField.defaults.color}>
           <Label>{config.label}</Label>
-          <Select
-            name={`select-${config.label}`}
-            value={this.state.value}
-            options={config.options || []}
-            onChange={this.handleSelectChange}
-            clearable={false}
-            {...config.SelectArgs ? config.SelectArgs : {}}
-          />
+          {this.state.disabled ? (
+            <Select
+              {...selectProps}
+              disabled={true}
+            />
+          ) : (
+            <Select
+              {...selectProps}
+              disabled={false}
+            />
+          )}
           <span className="error-msg select-error">{this.state.errorMsg}</span>
           {FormField.defaults.styles.selectStyle === "lined" ? (
             <Line />
           ): ''}
-
         </SelectWrapper>
       );
     }
