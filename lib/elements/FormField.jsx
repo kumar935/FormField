@@ -1,6 +1,5 @@
 import '../styles/common.css';
 import React, { Component } from 'react';
-import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 import {REGEXP_PREFIX, ERROR_MSGS} from "./Constants";
 import {
