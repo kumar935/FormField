@@ -1,3 +1,2 @@
-import FormField, { defaults } from './lib/elements/FormField';
-console.log(FormField);
-export {FormField, defaults};
+import FormField from './build/elements/FormField';
+export {FormField};
