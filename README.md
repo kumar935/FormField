@@ -1,5 +1,6 @@
 # FormField
 A react component for making forms easy.
+[Codesandbox demo](https://codesandbox.io/s/charming-thunder-wszxx?fontsize=14&hidenavigation=1&theme=dark)
 
 # Installation
 
