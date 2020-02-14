@@ -13,6 +13,7 @@ import CheckBoxGroup from "./inputs/CheckBoxGroup";
 // import DateTimeInput from "./inputs/DateTimeInput";
 import CurrencyInput from "./inputs/CurrencyInput";
 import OtpInput from "./inputs/OtpInput";
+import "../styles/common.css";
 class FormFieldMain extends Component {
   constructor(props) {
     super(props);

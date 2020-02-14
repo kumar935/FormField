@@ -1,6 +1,7 @@
 import React from "react";
 import FormInput from "./FormInput";
 import Select from "react-select";
+import "../../styles/radio.css"
 
 class RadioInput extends FormInput {
   handleRadioChange = changeEvent => {
