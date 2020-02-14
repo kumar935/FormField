@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { validationProfilesConfig, ERROR_MSGS } from "./validationProfiles";
+import { validationProfilesConfig, ERROR_MSGS } from "./ValidationProfiles";
 import validationService from "./validationService";
 import TextInput from "./inputs/TextInput";
 import NumberInput from "./inputs/NumberInput";
