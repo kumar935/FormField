@@ -220,6 +220,11 @@ class FormFieldMain extends Component {
     }
   };
 
+  componentWillUnmount() {
+    this.setValue("");
+    if (this.props.onRef) this.props.onRef(null);
+  }
+
   render() {
     const { config, onRef, disabled, value, ...rest } = this.props; //writing onRef, disabled, value, so that they don't get included in ...rest
     let { error, errorMsg } = this.state;
@@ -247,10 +252,7 @@ class FormFieldMain extends Component {
     );
   }
 
-  componentWillUnmount() {
-    this.setValue("");
-    if (this.props.onRef) this.props.onRef(null);
-  }
+
 }
 
 export default FormFieldMain;

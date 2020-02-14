@@ -1,8 +1,12 @@
 import React from "react";
 import FormInput from "./FormInput";
+import { InputWrapper, Line, Input, Label, styleDefaults } from "../StyledElements";
 // import "../styles/textinput.scss";
 
 class TextInput extends FormInput {
+  static defaults = {
+    styles: styleDefaults
+  }
   handleInputChange = e => {
     let newValue = e.target.value;
     if (this.props.config.sizeRange) {
@@ -40,11 +44,32 @@ class TextInput extends FormInput {
       ...rest
     } = this.props;
     return (
-      <div
+      <InputWrapper
         className={`ff-txt ${config.containerClass || ""}`}
         style={{ position: "relative" }}
       >
-        <label
+        <Input
+          autoComplete="off"
+          className="form-control"
+          dir={config.dir}
+          error={error.toString()}
+          name={config.label}
+          onChange={this.handleInputChange}
+          ref={this.input}
+          required
+          type={
+            config.type === "text" || config.type === "number"
+              ? "text"
+              : config.type
+          }
+          value={value}
+          {...rest}
+          onCopy={this.onCutCopyPaste}
+          onCut={this.onCutCopyPaste}
+          onPaste={this.onCutCopyPaste}
+          placeholder={config.placeholder}
+        />
+        <Label
           htmlFor={this.props.id}
           className="ff-label"
           style={{
@@ -53,44 +78,24 @@ class TextInput extends FormInput {
           }}
         >
           {this.props.config.label || ""}
-        </label>
-        <input
-          type={
-            config.type === "text" || config.type === "number"
-              ? "text"
-              : config.type
-          }
-          name={config.label}
-          value={value}
-          error={error.toString()}
-          className="form-control"
-          ref={this.input}
-          autoComplete="off"
-          onChange={this.handleInputChange}
-          dir={config.dir}
-          required
-          {...rest}
-          placeholder={config.placeholder}
-          onCut={this.onCutCopyPaste}
-          onCopy={this.onCutCopyPaste}
-          onPaste={this.onCutCopyPaste}
-        />
+        </Label>
         <span className="error">{errorMsg}</span>
         {config.loading ? <span className="c-three-dots-loader" /> : ""}
         {config.posRightBtn &&
         (config.posRightBtn.text ||
           config.posRightBtn.element ||
           config.posRightBtn.domClass) ? (
-          <label
+          <Label
             className={`position-right ${config.posRightBtn.domClass || ""}`}
             onClick={config.posRightBtn.onClick}
           >
             {config.posRightBtn.text || config.posRightBtn.element || ""}
-          </label>
+          </Label>
         ) : (
           ""
         )}
-      </div>
+        <Line className="line" color={TextInput.defaults.color}/>
+      </InputWrapper>
     );
   }
 }
