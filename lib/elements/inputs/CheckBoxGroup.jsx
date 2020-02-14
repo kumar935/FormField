@@ -1,6 +1,6 @@
 import React from "react";
 import FormInput from "./FormInput";
-// import "../styles/toggle.scss";
+import "../../styles/toggle.css"
 
 class CheckBoxGroup extends FormInput {
   state = {};
