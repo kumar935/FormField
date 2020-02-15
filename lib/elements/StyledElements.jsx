@@ -58,6 +58,10 @@ const Input = styled.input`
     font-size: 15px;
     color: ${props => props.color || styleDefaults.color};
   }
+  &[type="date"] ~ label{
+    top: 0;
+    font-size: 15px;
+  }
   &:focus ~ label.button, &[active="true"] ~ label.button, &:valid ~ label.button {
     color: #fff;
   }
@@ -455,14 +459,14 @@ const LinedSelectWrapper = DefaultSelectWrapper.extend`
       opacity: 1;
     }
   }
-  
+
   .Select-menu-outer {
     border-radius: 0;
     border: 0 solid transparent;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.47);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.47);
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.47);
-  
+
     box-sizing: border-box;
     margin-top: -21px;
     max-height: 200px;

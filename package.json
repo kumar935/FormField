@@ -1,6 +1,6 @@
 {
   "name": "@kumar935/formfield",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "description": "A react component for making forms easy.",
   "main": "index.js",
   "scripts": {

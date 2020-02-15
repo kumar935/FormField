@@ -1,2 +1,4 @@
 import FormField from './build/elements/FormField';
-export {FormField};
+import FormGroup from './build/elements/FormGroup';
+
+export {FormField, FormGroup};
